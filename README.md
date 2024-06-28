@@ -54,7 +54,7 @@ sound card numbers for -card and -out:
 serial devices for -cat:
   /dev/cu.usbserial-A503XT23
   /dev/cu.Bluetooth-Incoming-Port
-radio types for -cat: k3 rx340 8711 sdrip sdriq r75 r8500 ar5000 eb200 sdrplay prc138 
+radio types for -cat: k3 rx340 8711 sdrip sdriq r75 r8500 ar5000 eb200 sdrplay prc138
 ```
 
 Here's how I run WSPR receive with an IC-7300 connected via USB.
@@ -190,3 +190,72 @@ TypeError: can't multiply sequence by non-int of type 'float'
 
 I think what's going on is that the value returned by len() gets converted to a float
 if some arithmetic operation is done on the result.
+
+## Changes by Dhiru Kholia
+
+```
+wget -c https://master.dl.sourceforge.net/project/wsjt/samples/WSPR/150426_0918.wav
+
+python3 wspr.py -file 150426_0918.wav
+1487.2 1.6 0.1 -7 WD4LHT EL89 30
+1584.7 1.8 -0.0 -11  W3HH  EL89 30
+1444.2 2.1 -0.0 -9 ND6P   DM04 30
+1458.3 1.1 -0.0 -16  W5BIT EL09 17
+1515.3 1.5 0.0 -21 KI7CI  DM09 37
+1527.5 -1.0 0.0 -20 DJ6OL  JO52 37
+1500.7 0.3 -0.0 -5 NM7J   DM26 30
+1502.1 2.4 -1.0 -14 785081/U32ODA 10
+```
+
+```
+$ /usr/bin/time -v python3 wspr.py -file 150426_0918.wav
+1487.2 1.6 0.1 -7 WD4LHT EL89 30
+1584.7 1.8 -0.0 -11  W3HH  EL89 30
+1444.2 2.1 -0.0 -9 ND6P   DM04 30
+1458.3 1.1 -0.0 -16  W5BIT EL09 17
+1515.3 1.4 -0.0 -21 KI7CI  DM09 37
+1527.8 -1.0 0.0 -20 DJ6OL  JO52 37
+1500.7 0.3 -0.0 -5 NM7J   DM26 30
+1502.1 2.4 -1.0 -14 785081/U32ODA 10
+1490.8 5.5 1.1 -21 448LEM BN67 0
+1506.1 -1.5 -1.0 -21 <...>  KJ9SX 63
+	Command being timed: "python3 wspr.py -file 150426_0918.wav"
+	User time (seconds): 9.42
+	System time (seconds): 2.38
+	Percent of CPU this job got: 125%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 0:09.41
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 350756
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 4
+	Minor (reclaiming a frame) page faults: 93050
+	Voluntary context switches: 163
+	Involuntary context switches: 2126
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 0
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+```
+
+Orginal WSJT-X decoding results:
+
+```
+$ wsprd 150426_0918.wav
+0918  -9  1.1   0.001446  0  ND6P DM04 30
+0918 -15  0.1   0.001460  0  W5BIT EL09 17
+0918 -23  2.2   0.001465  0  G8VDQ IO91 37
+0918  -6  0.6   0.001489  0  WD4LHT EL89 30
+0918  -1 -0.8   0.001503  0  NM7J DM26 30
+0918 -21  0.5   0.001517  0  KI7CI DM09 37
+0918 -18 -1.9   0.001530  0  DJ6OL JO52 37
+0918 -11  0.8   0.001587  0  W3HH EL89 30
+0918 -25  0.7   0.001594  0  W3BI FN20 30
+<DecodeFinished>
+```
